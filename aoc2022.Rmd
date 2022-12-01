@@ -1,0 +1,33 @@
+---
+title: "Advent of Code 2022"
+author: "Robin Rölz"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+```{r Day 1}
+day1 = scan("data/01-input.txt", blank.lines.skip = FALSE)
+
+backpacks = list(c())
+bckp = c()
+
+i = 1
+
+for (n in day1){
+  if (is.na(n)){
+    backpacks = append(backpacks, list(bckp), after = i)
+    bckp = c()
+    
+    i = i+1
+    } else {
+      bckp = append(bckp, n)
+    }
+}
+lapply(backpacks, sum) %>% unlist() %>% max()
+lapply(backpacks, sum) %>% unlist() %>% sort() %>% tail(3) %>% sum()
+```
+
