@@ -30,4 +30,46 @@ for (n in day1){
 lapply(backpacks, sum) %>% unlist() %>% max()
 lapply(backpacks, sum) %>% unlist() %>% sort() %>% tail(3) %>% sum()
 ```
+```{r Day 2}
+day2 = read_table("data/02-input.txt", col_names = FALSE)
+valdict = c(
+  'A' = 1,
+  'B' = 2,
+  'C' = 3
+)
+stratdict = c(
+  'X' = 'A',
+  'Y' = 'B',
+  'Z' = 'C'
+)
+score_rps = function(a, b){
+  val = valdict[b]
+  win = 0
+  if (a == b) {
+    win = 3
+  } else if (a == "A"){
+    if (b == "B"){
+      win = 6
+    }
+  } else if (a == "B"){
+    if (b == "C"){
+      win = 6
+    }
+  } else if (a == "C"){
+    if (b == "A"){
+      win = 6
+    }
+  }
+  return(win+val)
+}
+day2 %>% rowwise() %>% 
+  mutate(myscore = score_rps(X1, stratdict[X2])) %>%
+  pull(myscore) %>%
+  sum()
+```
+```{r Day 2.2}
+day2 %>% mutate(oppscore = valdict[X1], myscore = if_else(X2 == 'Y', oppscore+3, ifelse(X2 == 'Z', (oppscore)%%3+1+6, (oppscore-2)%%3+1))) %>%
+  pull(myscore) %>% sum()
+```
+
 
