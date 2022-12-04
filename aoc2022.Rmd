@@ -71,5 +71,44 @@ day2 %>% rowwise() %>%
 day2 %>% mutate(oppscore = valdict[X1], myscore = if_else(X2 == 'Y', oppscore+3, ifelse(X2 == 'Z', (oppscore)%%3+1+6, (oppscore-2)%%3+1))) %>%
   pull(myscore) %>% sum()
 ```
+```{r Day3}
+day3 <- readLines("data/03-input.txt")
+day3 %>% tibble() %>%
+  rowwise()%>%
+  mutate(left = substring(., 1, nchar(.)/2), 
+        right = substring(., nchar(.)/2+1, nchar(.)))%>%
+  mutate(common = intersect(simplify(strsplit(left, "")), simplify(strsplit(right, ""))),
+        score = ifelse(str_detect(common, '[:upper:]'), utf8ToInt(common)-38, utf8ToInt(common)-96))%>%
+  pull(score) %>% sum()
+
+elves = list()
+n = c()
+score = 0
+for (x in 1:length(day3)){
+   elves[x%%3+1] = strsplit(day3[x], "")
+   if(x%%3 == 0){
+     n = intersect(intersect(simplify(elves[1]), simplify(elves[2])), simplify(elves[3]))
+     score = score + ifelse(str_detect(n, '[:upper:]'), utf8ToInt(n)-38, utf8ToInt(n)-96)}
+}
+score
+```
+
+```{r Day4}
+day4 = read_delim("data/04-input.txt", col_names = c("elf1", "elf2"), col_types = "c")
+day4 %>% 
+ separate(elf1, into = c("elf1begin", "elf1end"), sep = "-") %>%
+ separate(elf2, into = c("elf2begin", "elf2end"), sep = "-") %>%
+ rowwise() %>%
+ mutate(contained = is_empty(setdiff(seq(elf1begin,elf1end), seq(elf2begin,elf2end))) | is_empty(setdiff(seq(elf2begin,elf2end), seq(elf1begin,elf1end)))) %>%
+ ungroup %>%
+ summarise(sum(contained))
+day4 %>% 
+ separate(elf1, into = c("elf1begin", "elf1end"), sep = "-") %>%
+ separate(elf2, into = c("elf2begin", "elf2end"), sep = "-") %>%
+ rowwise() %>%
+ mutate(overlap = !is_empty(intersect(seq(elf1begin,elf1end), seq(elf2begin,elf2end)))) %>%
+ ungroup %>%
+ summarise(sum(overlap))
+```
 
 
