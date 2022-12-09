@@ -30,6 +30,7 @@ function seetree(trees)
     vismat[:,:,2] = reduce(hcat, [visline(x) for x in eachcol(forest)])
     vismat[:,:,3] = transpose(reduce(hcat, reverse.([visline(reverse(x)) for x in eachrow(forest)])))
     vismat[:,:,4] = reduce(hcat, reverse.([visline(reverse(x)) for x in eachcol(forest)]))
+    vismat
 end
 
 function viewdistance(trees)
