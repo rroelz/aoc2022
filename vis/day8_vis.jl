@@ -1,4 +1,4 @@
-using Makie
+using GLMakie
 
 function readforest(file)
     input = readlines(file)
@@ -72,4 +72,20 @@ sum(vistrees)
 scores = scorescenes(forest)
 findmax(scores)
 
-Cairo
+GLMakie.activate!()
+fig = Figure()
+ax1 = Axis(fig[1,1], aspect = DataAspect())
+hm1 = heatmap!(ax1, forest, 
+    colormap = reverse(cgrad(:bamako)))
+Colorbar(fig[1,2], hm1)
+
+ax2 = Axis(fig[2,1], aspect = DataAspect())
+hm2 = heatmap!(ax2, vistrees[:,:,1], 
+    colormap = :grayC)
+Colorbar(fig[2,2], hm2)
+
+ax3 = Axis(fig[3,1], aspect = DataAspect())
+hm3 = heatmap!(ax3, scores, 
+    colormap = :bilbao)
+Colorbar(fig[3,2], hm3)
+fig
